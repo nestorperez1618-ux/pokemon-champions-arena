@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pokémon Champions Arena</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=500;800;900&family=Rajdhani:wght=500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="main-menu-screen" class="game-wrapper grid-center">
+        <div class="arena-background main-stadium-bg">
+            <div class="pokemon-bg-container rayquaza-side">
+                <div class="neon-glow-bg rayquaza-glow"></div>
+                <img class="gif-bg" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/384.gif" alt="Rayquaza Arena">
+            </div>
+            <div class="pokemon-bg-container mewtwo-side">
+                <div class="neon-glow-bg mewtwo-glow"></div>
+                <img class="gif-bg" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/150.gif" alt="Mewtwo Arena">
+            </div>
+
+            <div class="main-menu-content">
+                <header class="game-logo">
+                    <h1>POKÉMON</h1>
+                    <span class="logo-subtitle">CHAMPIONS</span>
+                    <span class="logo-badge">ARENA</span>
+                </header>
+
+                <div class="primary-action-area">
+                    <button class="btn-neon btn-primary" onclick="irASeleccionStarter()">
+                        <span class="btn-text">ENTRAR AL TORNEO</span>
+                    </button>
+                </div>
+
+                <footer class="menu-dashboard">
+                    <div class="dash-card card-red">
+                        <div class="card-icon">🏆</div>
+                        <div class="card-info">
+                            <span class="card-label">TROFEO RÉCORD:</span>
+                            <span id="txt-record-sala" class="card-value">SALA 0</span>
+                        </div>
+                    </div>
+                    <button class="btn-neon btn-secondary" onclick="abrirModalPokedex()">
+                        <span class="btn-icon">📖</span> VER POKÉDEX GLOBAL
+                    </button>
+                    <div class="dash-card card-teal">
+                        <div class="card-icon">🪙</div>
+                        <div class="card-info">
+                            <span class="card-label">BILLETERA GLOBAL:</span>
+                            <span id="txt-billetera-global" class="card-value">0</span>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <div id="starter-screen" class="game-wrapper grid-center" style="display: none;">
+        <div class="arena-background main-stadium-bg">
+            <div class="main-menu-content">
+                <header class="game-logo">
+                    <span class="logo-badge" style="letter-spacing: 4px; font-size: 1.4rem;">CHOOSE YOUR</span>
+                    <span class="logo-subtitle" style="font-size: 2.5rem;">CHAMPION</span>
+                </header>
+
+                <div id="starter-options" class="starter-grid-container"></div>
+
+                <footer style="width: 100%; display: flex; justify-content: center; margin-top: 10px;">
+                    <button class="btn-neon btn-secondary" onclick="regresarAlMenu()" style="border-color: var(--neon-red); background: linear-gradient(180deg, #991b1b 0%, #7f1d1d 100%); max-width: 200px; padding: 12px 24px;">
+                        ⬅️ VOLVER
+                    </button>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-container" class="game-wrapper grid-center" style="display: none;">
+        <div class="arena-background combat-arena-stadium flex-battle-layout">
+            
+            <header class="battle-header">
+                <span id="battle-sala-title" class="battle-round-badge">SALA 1 / 10</span>
+                <div id="player-team-dock" class="team-dock">
+                    </div>
+            </header>
+
+            <div class="battle-arena-field">
+                <div class="fighter-panel rival-panel">
+                    <div class="fighter-hud">
+                        <div class="hud-meta">
+                            <span id="rival-name" class="fighter-name">RIVAL</span>
+                            <span id="rival-badge-type" class="type-mini-badge">---</span>
+                        </div>
+                        <div class="stat-bar-bg"><div id="rival-hp-bar" class="stat-bar-fill fill-hp" style="width: 100%;"></div></div>
+                        <span id="rival-hp-text" class="hud-hp-num">100/100 HP</span>
+                    </div>
+                    <div class="fighter-sprite-box">
+                        <img id="rival-sprite" src="" alt="Rival">
+                        <div id="rival-anim-effect" class="attack-animation-overlay"></div>
+                    </div>
+                </div>
+
+                <div class="fighter-panel player-panel">
+                    <div class="fighter-sprite-box">
+                        <img id="player-sprite" src="" alt="Tu Pokémon">
+                        <div id="player-anim-effect" class="attack-animation-overlay"></div>
+                    </div>
+                    <div class="fighter-hud">
+                        <div class="hud-meta">
+                            <span id="player-name" class="fighter-name">TU POKÉMON</span>
+                            <span id="player-badge-type" class="type-mini-badge">---</span>
+                        </div>
+                        <div class="stat-bar-bg"><div id="player-hp-bar" class="stat-bar-fill fill-hp" style="width: 100%;"></div></div>
+                        <span id="player-hp-text" class="hud-hp-num">100/100 HP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="battle-log" class="battle-logger-box">
+                <p class="log-system">Iniciando protocolo de combate...</p>
+            </div>
+
+            <footer class="battle-actions-footer">
+                <div id="battle-moves-grid" class="moves-grid"></div>
+            </footer>
+        </div>
+    </div>
+
+    <div id="capture-modal" class="modal-overlay" style="display: none; z-index: 1001;">
+        <div class="digital-card-container capture-box-layout">
+            <h2 class="capture-title">¡VICTORIA EN LA ARENA!</h2>
+            <p class="capture-subtitle">¿Deseas gestionar este Pokémon vencido?</p>
+            
+            <div class="captured-preview">
+                <img id="cap-poke-img" src="" alt="Candidato">
+                <h3 id="cap-poke-name">POKÉMON</h3>
+                <span id="cap-poke-type" class="card-badge-type">---</span>
+            </div>
+
+            <div class="capture-options-stack">
+                <button class="btn-neon btn-primary" onclick="intentarAgregarAlEquipo()" style="background: linear-gradient(180deg, #10b981 0%, #047857 100%); border-color: var(--neon-green);">
+                    ➕ LLEVAR EN EQUIPO
+                </button>
+                <div id="replace-list-container" class="replace-stack" style="display: none;">
+                    <p style="font-size: 0.8rem; color: #94a3b8; text-align: center; margin-bottom: 5px;">SELECCIONA POR QUIÉN REEMPLAZAR:</p>
+                    <div id="replace-buttons-grid" class="replace-grid"></div>
+                </div>
+                <button class="btn-neon btn-secondary" onclick="dejarPokemonVencido()" style="background: rgba(30, 41, 59, 0.8); border-color: #64748b;">
+                    ❌ DEJAR / CONTINUAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pokedex-modal" class="modal-overlay" style="display: none;">
+        <div class="pokedex-container">
+            <header class="pokedex-header">
+                <h2>📖 POKÉDEX GLOBAL</h2>
+                <button class="btn-close-pokedex" onclick="cerrarModalPokedex()">✕</button>
+            </header>
+            <div class="pokedex-search-box">
+                <input type="text" id="pokedex-search-input" placeholder="Buscar Pokémon por nombre..." oninput="filtrarPokedex()">
+            </div>
+            <div id="pokedex-list" class="pokedex-grid">
+                <p class="pokedex-loading">Cargando base de datos de la PokéAPI...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="pokemon-card-overlay" class="modal-overlay" style="display: none; z-index: 1000; background-color: rgba(2, 6, 23, 0.9);">
+        <div class="digital-card-container">
+            <div class="digital-card-scanner"></div>
+            <div class="digital-card-body">
+                <div class="card-top-row">
+                    <span id="card-poke-id" class="card-badge-id">N° 000</span>
+                    <span id="card-poke-type" class="card-badge-type">---</span>
+                </div>
+                <div class="card-image-frame">
+                    <img id="card-poke-img" src="" alt="Carta Pokémon">
+                </div>
+                <h3 id="card-poke-name">POKÉMON</h3>
+                <div class="card-stats-container">
+                    <div class="stat-row"><span class="stat-label">HP</span><div class="stat-bar-bg"><div id="bar-hp" class="stat-bar-fill fill-hp"></div></div><span id="val-hp" class="stat-value">0</span></div>
+                    <div class="stat-row"><span class="stat-label">ATK</span><div class="stat-bar-bg"><div id="bar-atk" class="stat-bar-fill fill-atk"></div></div><span id="val-atk" class="stat-value">0</span></div>
+                    <div class="stat-row"><span class="stat-label">DEF</span><div class="stat-bar-bg"><div id="bar-def" class="stat-bar-fill fill-def"></div></div><span id="val-def" class="stat-value">0</span></div>
+                    <div class="stat-row"><span class="stat-label">SPD</span><div class="stat-bar-bg"><div id="bar-spd" class="stat-bar-fill fill-spd"></div></div><span id="val-spd" class="stat-value">0</span></div>
+                </div>
+                <button class="btn-neon btn-close-card" onclick="cerrarCartaDigital()">CERRAR INTERFAZ</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
